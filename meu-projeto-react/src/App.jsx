@@ -1,66 +1,87 @@
-import { useState } from "react";
-import "./App.css";
-import MusicCard from "./components/MusicCard";
-import iwonder from "./assets/Graduation_(album).jpg";
-import nevada from "./assets/download (1).jfif";
-import son from "./assets/son.jpg";
-import spotifyLogo from "./assets/spotify.svg";
+import { useState, useRef } from 'react'
+import './App.css'
+import Album from './components/Album'
 
 function App() {
-  const [play, setPlay] = useState(null);
 
-  const musics = [
+  const musicas = [
+
     {
       id: 1,
-      title: "I wonder",
-      artist: "Kanye West",
-      cover: iwonder,
+      nome: "Good Morning",
+      tempo: "3:15",
+      arquivo: "/musicas/goodmorning.mp3"
     },
+
     {
       id: 2,
-      title: "Nevada",
-      artist: "Vincetone",
-      cover:
-        nevada,
+      nome: "Champion",
+      tempo: "2:47",
+      arquivo: "/musicas/champion.mp3"
     },
+
     {
       id: 3,
-      title: "leave me alone",
-      artist: "Michael Jackson",
-      cover:
-        son,
+      nome: "Stronger",
+      tempo: "5:11",
+      arquivo: "/musicas/stronger.mp3"
     },
-  ];
 
-  function toggleMusic(id) {
-    if (play === id) {
-      setPlay(null);
-    } else {
-      setPlay(id);
+    {
+      id: 4,
+      nome: "I Wonder",
+      tempo: "4:03",
+      arquivo: "/musicas/iwonder.mp3"
     }
+
+  ]
+
+  const [musicaAtual, setMusicaAtual] = useState("")
+
+  const audioRef = useRef()
+
+  function tocarMusica(musica) {
+
+    setMusicaAtual(musica.nome)
+
+    audioRef.current.src = musica.arquivo
+
+    audioRef.current.play()
   }
 
-  return (
-    <div className="app">
-      <h1 className="title">
-        <img src={spotifyLogo} className="spotify-logo" />
-        Spotify
-      </h1>
+return (
 
-      <div className="music-list">
-        {musics.map((music) => (
-          <MusicCard
-            key={music.id}
-            title={music.title}
-            artist={music.artist}
-            cover={music.cover}
-            isPlaying={play === music.id}
-            onPlay={() => toggleMusic(music.id)}
-          />
-        ))}
-      </div>
+  <div>
+
+    <header className="navbar">
+
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
+        alt=""
+      />
+
+      <h1>Spotify</h1>
+
+    </header>
+
+    <div className="app">
+
+      <Album
+        titulo="Graduation"
+        artista="Kanye West"
+        capa="https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg"
+        musicas={musicas}
+        musicaAtual={musicaAtual}
+        tocarMusica={tocarMusica}
+      />
+
+      <audio ref={audioRef}></audio>
+
     </div>
-  );
+
+  </div>
+
+)
 }
 
-export default App;
+export default App
